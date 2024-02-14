@@ -5,7 +5,7 @@ export const connectDb = async()=>{
 
 
     try{
-      await  mongoose.connect("mongodb+srv://krish:krish1009@cluster0.ccrejqz.mongodb.net/?retryWrites=true&w=majority")
+      await  mongoose.connect("url")
       console.log("succesfully connected DB");
     }
     catch (error) {
