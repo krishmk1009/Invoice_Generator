@@ -1,12 +1,19 @@
 import React, { useState } from "react";
+import { useAppDispatch , useAppSelector } from "../hooks/redux-hooks";
+import { logout } from "../slices/authSlice";
 
 const Navbar = () => {
   const [mobileMenu, setMobileMenu] = useState(false);
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector((state)=>state.auth.basicUserInfo !== null)
 
   const toggleMobileMenu = () => {
     setMobileMenu(!mobileMenu);
   };
 
+  const handleLogout = ()=>{
+    dispatch(logout())
+  }
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -47,29 +54,10 @@ const Navbar = () => {
             />
           </svg>
         </button>
-        <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-            <a
-              href="#_"
-              className="inline-flex items-center justify-center w-full px-5 py-2 mb-2 text-lg text-black border-2  border-cyan-500  rounded-2xl sm:w-auto sm:mb-0"
-            >
-            Login
-              <svg
-                className="w-4 h-4 ml-1"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </a>
-            
-          </ul>
-        </div>
+        <div className="hidden w-full md:block md:w-auto" id="navbar-default"></div>
+         
+         {isAuthenticated ?  <button onClick={handleLogout}  className="border-1 border-black rounded-full"> Logout</button> :  <button className="border-1 border-black rounded-full"> Login</button> }
+       
       </div>
     </nav>
   );

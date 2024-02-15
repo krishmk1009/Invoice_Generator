@@ -2,15 +2,26 @@
 
 import React, { useState } from "react";
 import { authStyles } from "../styles/LoginForm/Style";
+import { useAppDispatch } from "../hooks/redux-hooks";
+import { login, register } from "../slices/authSlice";
 
 const Auth: React.FC = () => {
-  const [isRegister, setIsRegister] = useState<boolean>(true);
+  const [isRegister, setIsRegister] = useState<boolean>(false);
   const [formData, setFormData] = useState<any>(); 
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     console.log("Form Data:", formData);
+
+    if (isRegister) {
+      dispatch(register(formData)); 
+    } else {
+      dispatch(login(formData)); 
+    }
+
+    setFormData(undefined);
 
     setFormData(undefined);
   };
