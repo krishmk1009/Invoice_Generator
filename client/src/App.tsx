@@ -7,7 +7,7 @@ import Login from "./Pages/Login";
 import Navbar from "./Components/Navbar";
 import ProtectedLayout from "./Layout/ProtectedLayout";
 import DefaultLayout from "./Layout/DefaultLayout";
-import ProductTable from "./Components/CreateInvoice";
+import CreateInvoice from "./Pages/CreateInvoice";
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
         <Routes>
           <Route element={<ProtectedLayout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/create-invoice" element={<ProductTable />} />
+            <Route path="/create-invoice" element={<CreateInvoice />} />
             
           </Route>
 
