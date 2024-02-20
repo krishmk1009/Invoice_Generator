@@ -11,6 +11,9 @@ const CreateInvoice: React.FC = () => {
         <button className="bg-blue-500  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Create Invoice
         </button>
+        <button className="mt-4 mx-5 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" >
+                Generate PDF
+            </button>
       </div>
     </div>
   );

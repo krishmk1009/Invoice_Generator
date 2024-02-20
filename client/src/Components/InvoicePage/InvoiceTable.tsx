@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 
+import InvoicePDF from "./InvoicePDF";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+
+
+
 const InvoiceTable: React.FC = () => {
     const [rows, setRows] = useState([
-        { productName: "", quantity: 0, rate: 0 }
+        { productName: "", quantity: 0, rate: 0, gst: 0 }
     ]);
 
+
     const addRow = () => {
-        setRows([...rows, { productName: "", quantity: 0, rate: 0 }]);
+        setRows([...rows, { productName: "", quantity: 0, rate: 0, gst: 0 }]);
     };
 
     const deleteRow = (index: number) => {
@@ -22,9 +28,14 @@ const InvoiceTable: React.FC = () => {
         setRows(updatedRows);
     };
 
-    let finalTotal = rows.reduce((accumulator , currentValue)=>{
-        return accumulator+ (currentValue.rate * currentValue.quantity);
-    },0)
+    let finalTotal = rows.reduce((accumulator, currentValue) => {
+        const subtotal = currentValue.quantity * currentValue.rate;
+        const gstAmount = (subtotal * currentValue.gst) / 100;
+        return accumulator + subtotal + gstAmount;
+    }, 0);
+
+
+    
 
     const tableCellClasses: string = "px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200";
     const tableHeaderClasses: string = "px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase";
@@ -41,6 +52,7 @@ const InvoiceTable: React.FC = () => {
                                         <th scope="col" className={tableHeaderClasses}>Product Name</th>
                                         <th scope="col" className={tableHeaderClasses}>Quantity</th>
                                         <th scope="col" className={tableHeaderClasses}>Rate</th>
+                                        <th scope="col" className={tableHeaderClasses}>GST</th>
                                         <th scope="col" className="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">Total</th>
                                     </tr>
                                 </thead>
@@ -66,8 +78,14 @@ const InvoiceTable: React.FC = () => {
                                                         onChange={(e) => handleInputChange(e, index)}
                                                     />
                                                 </td>
+                                                <td className={tableCellClasses}>
+                                                    <input type="number" name="gst" placeholder="Enter GST"
+                                                        value={row.gst}
+                                                        onChange={(e) => handleInputChange(e, index)}
+                                                    />
+                                                </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                                    INR {row.quantity * row.rate}
+                                                    INR {((row.quantity * row.rate) + ((row.quantity * row.rate * row.gst) / 100))}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium text-red-600">
                                                     <button onClick={() => deleteRow(index)}>Delete</button>
@@ -85,6 +103,15 @@ const InvoiceTable: React.FC = () => {
             <button className="mt-4 mx-5 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 " onClick={addRow}>
                 Add Product  +
             </button>
+            <InvoicePDF rows={rows} finalTotal={finalTotal} />
+            <PDFDownloadLink
+        document={<InvoicePDF rows={rows} finalTotal={finalTotal} />}
+        fileName="invoice.pdf"
+      >
+        {({ blob, url, loading, error }) =>
+          loading ? "Loading document..." : "Download PDF"
+        }
+      </PDFDownloadLink>
             <p> total = {finalTotal}</p>
         </div>
     );
