@@ -12,6 +12,10 @@ const productSchema = mongoose.Schema({
     productRate: {
         type: Number,
         required: true,
+    },
+    productGst: {
+        type: Number,
+        required: true,
     }
 })
 
@@ -24,18 +28,14 @@ const invoiceSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
+    },
+    products: [productSchema],
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
-    ,
-    products: [productSchema]
 })
 
-invoiceSchema.pre('save', function (next) {
-    this.products.forEach((product) => {
-        product.productTotal = product.productQty * product.productRate;
-        product.productGST = 0.18 * product.productTotal;
-    });
-    next();
-})
 
 
 const Invoice = mongoose.model("Invoice", invoiceSchema)
