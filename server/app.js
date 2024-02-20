@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 export const app = express();
 import userRouter from "./Routes/users.js"
+import invoiceRouter from "./Routes/invoice.js"
 import { config } from "dotenv";
 
 config({
@@ -22,5 +23,5 @@ app.use(cors({
 })
 
 app.use("/api/v1/users" , userRouter)
-
+app.use("/api/v1/invoice", invoiceRouter)
 

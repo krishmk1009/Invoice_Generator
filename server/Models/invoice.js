@@ -30,6 +30,11 @@ const invoiceSchema = mongoose.Schema({
         required: true,
     },
     products: [productSchema],
+    
+    total: {
+        type: Number,
+        required: true,
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -39,3 +44,5 @@ const invoiceSchema = mongoose.Schema({
 
 
 const Invoice = mongoose.model("Invoice", invoiceSchema)
+
+export default Invoice
