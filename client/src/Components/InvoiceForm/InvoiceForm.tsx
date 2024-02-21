@@ -61,29 +61,30 @@ setData(data => ({
   );
 };
 
-const InvoiceForm:React.FC = () => {
-  const [companyData, setCompanyData] = useState<FormDetails>({ name: "", address: "" });
-  const [customerData, setCustomerData] = useState<FormDetails>({ name: "", address: "" });
+interface InvoiceFormProps {
+  companyData: FormDetails;
+  setCompanyData: React.Dispatch<React.SetStateAction<FormDetails>>;
+  customerData: FormDetails;
+  setCustomerData: React.Dispatch<React.SetStateAction<FormDetails>>;
+}
 
+const InvoiceForm: React.FC<InvoiceFormProps> = ({ companyData, setCompanyData, customerData, setCustomerData }) => {
   return (
     <div className="max-w-7xl mx-auto flex bg-gray-100 my-10 rounded">
-     
       <DetailForm
         formLabel="Your Company details"
         labelForName="name"
         labelForAddress="address"
-        setData = {setCompanyData}
-        data = {companyData}
+        setData={setCompanyData}
+        data={companyData}
       />
       <DetailForm
         formLabel="Customer Details"
         labelForName="name"
         labelForAddress="address"
-        setData = {setCustomerData}
+        setData={setCustomerData}
         data={customerData}
       />
-
-     
     </div>
   );
 };

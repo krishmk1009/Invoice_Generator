@@ -2,17 +2,38 @@ import React, { useState } from "react";
 
 import InvoicePDF from "./InvoicePDF";
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import { useAppSelector } from "../../hooks/redux-hooks";
 
 
 
-const InvoiceTable: React.FC = () => {
-    const [rows, setRows] = useState([
-        { productName: "", quantity: 0, rate: 0, gst: 0 }
-    ]);
+interface Row {
+    productName: string;
+    productQuantity: number;
+    productRate: number;
+    productGst: number;
+  }
+  
+  interface Props {
+    rows: Row[];
+    setRows: React.Dispatch<React.SetStateAction<Row[]>>;
+    total: number;
+    setTotal: React.Dispatch<React.SetStateAction<number>>;
+    
+    setUser: React.Dispatch<React.SetStateAction<string | undefined>>;
+  }
+  
+  
+const InvoiceTable: React.FC<Props> = ({rows, setRows , total, setTotal  , setUser}) => {
+    
 
+    const basicUserInfo = useAppSelector((state)=>state.auth.basicUserInfo);
+    setUser(basicUserInfo?.id);
+
+    
+    
 
     const addRow = () => {
-        setRows([...rows, { productName: "", quantity: 0, rate: 0, gst: 0 }]);
+        setRows([...rows, { productName: "", productQuantity: 0, productRate: 0, productGst: 0 }]);
     };
 
     const deleteRow = (index: number) => {
@@ -29,10 +50,13 @@ const InvoiceTable: React.FC = () => {
     };
 
     let finalTotal = rows.reduce((accumulator, currentValue) => {
-        const subtotal = currentValue.quantity * currentValue.rate;
-        const gstAmount = (subtotal * currentValue.gst) / 100;
-        return accumulator + subtotal + gstAmount;
+        const subtotal = currentValue.productQuantity * currentValue.productRate;
+        const productGstAmount = (subtotal * currentValue.productGst) / 100;
+        
+        return accumulator + subtotal + productGstAmount;
     }, 0);
+
+    setTotal(finalTotal);
 
 
     
@@ -50,9 +74,9 @@ const InvoiceTable: React.FC = () => {
                                 <thead>
                                     <tr>
                                         <th scope="col" className={tableHeaderClasses}>Product Name</th>
-                                        <th scope="col" className={tableHeaderClasses}>Quantity</th>
-                                        <th scope="col" className={tableHeaderClasses}>Rate</th>
-                                        <th scope="col" className={tableHeaderClasses}>GST</th>
+                                        <th scope="col" className={tableHeaderClasses}>productQuantity</th>
+                                        <th scope="col" className={tableHeaderClasses}>productRate</th>
+                                        <th scope="col" className={tableHeaderClasses}>productGst</th>
                                         <th scope="col" className="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">Total</th>
                                     </tr>
                                 </thead>
@@ -67,25 +91,25 @@ const InvoiceTable: React.FC = () => {
                                                     />
                                                 </td>
                                                 <td className={tableCellClasses}>
-                                                    <input type="number" name="quantity" placeholder="Enter Quantity"
-                                                        value={row.quantity}
+                                                    <input type="number" name="productQuantity" placeholder="Enter productQuantity"
+                                                        value={row.productQuantity}
                                                         onChange={(e) => handleInputChange(e, index)}
                                                     />
                                                 </td>
                                                 <td className={tableCellClasses}>
-                                                    <input type="number" name="rate" placeholder="Enter Rate"
-                                                        value={row.rate}
+                                                    <input type="number" name="productRate" placeholder="Enter productRate"
+                                                        value={row.productRate}
                                                         onChange={(e) => handleInputChange(e, index)}
                                                     />
                                                 </td>
                                                 <td className={tableCellClasses}>
-                                                    <input type="number" name="gst" placeholder="Enter GST"
-                                                        value={row.gst}
+                                                    <input type="number" name="productGst" placeholder="Enter productGst"
+                                                        value={row.productGst}
                                                         onChange={(e) => handleInputChange(e, index)}
                                                     />
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                                    INR {((row.quantity * row.rate) + ((row.quantity * row.rate * row.gst) / 100))}
+                                                    INR {((row.productQuantity * row.productRate) + ((row.productQuantity * row.productRate * row.productGst) / 100))}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium text-red-600">
                                                     <button onClick={() => deleteRow(index)}>Delete</button>

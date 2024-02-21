@@ -5,9 +5,9 @@ import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 // Define types for props
 type Row = {
   productName: string;
-  quantity: number;
-  rate: number;
-  gst: number;
+  productQuantity: number;
+  productRate: number;
+  productGst: number;
 };
 
 type Props = {

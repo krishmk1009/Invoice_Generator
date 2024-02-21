@@ -8,8 +8,15 @@ type Product = {
   gst: number;
 };
 
+
+
 type Invoice = {
+  name: string;
   products: Product[];
+  customerName: string;
+  customerAddress: string;
+  companyName: string;
+  companyAddress: string;
 };
 
 type InvoiceApiState = {
@@ -24,38 +31,38 @@ const initialState: InvoiceApiState = {
   error: null,
 };
 
-
-export const getInvoices = createAsyncThunk("get all invoices" , async (userId:string)=>{
+export const getInvoices = createAsyncThunk(
+  "get all invoices",
+  async (userId: string) => {
     try {
-        const response  = await axiosInstance.get(`/invoice/${userId}/invoices`)
-        return response.data
-    } catch (error:any) {
-        console.log(error)
-        throw(error)
+      const response = await axiosInstance.get(`/invoice/${userId}/invoices`);
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      throw error;
     }
-})
+  }
+);
 
 const invoiceSlice = createSlice({
-    name:"invoice",
-    initialState,
-    reducers:{
-
-    },
-    extraReducers : (builder)=>{
-        builder
-            .addCase(getInvoices.pending , (state)=>{
-                state.status = "loading"
-                state.error = null
-            })
-            .addCase(getInvoices.fulfilled , (state,action)=>{
-                state.status = "idle";
-                state.invoices = action.payload
-            })
-            .addCase(getInvoices.rejected  , (state, action) =>{
-                state.status = "idle",
-                state.error=action.error.message || "Failed to fetch invoices"
-            })
-    }
-})
+  name: "invoice",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getInvoices.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(getInvoices.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.invoices = action.payload;
+      })
+      .addCase(getInvoices.rejected, (state, action) => {
+        (state.status = "idle"),
+          (state.error = action.error.message || "Failed to fetch invoices");
+      });
+  },
+});
 
 export default invoiceSlice.reducer;

@@ -41,13 +41,16 @@ const initialState: AuthApiState = {
 export const login = createAsyncThunk("login", async (data: User) => {
   try {
     const response = await axiosInstance.post("/users/login", data);
-    const resData = response.data;
-    console.log(response.data);
-
-    localStorage.setItem("userInfo", JSON.stringify(resData));
-    toast.success("Succesfully  logged in");
-
-    return resData;
+    const { token, user } = response.data;
+    const userBasicInfo: UserBasicInfo = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      token: token,
+    };
+    localStorage.setItem("userInfo", JSON.stringify(userBasicInfo));
+    toast.success("Successfully logged in");
+    return userBasicInfo;
   } catch (error: any) {
     if (error.response && error.response.status === 401) {
       toast.error("Incorrect email or password");
@@ -62,13 +65,16 @@ export const login = createAsyncThunk("login", async (data: User) => {
 
 export const register = createAsyncThunk("register", async (data: NewUser) => {
   const response = await axiosInstance.post("/users/register", data);
-  console.log(response);
-
-  const resData = response.data;
-
-  localStorage.setItem("userInfo", JSON.stringify(resData));
-
-  return resData;
+  const { token, user } = response.data;
+    const userBasicInfo: UserBasicInfo = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      token: token,
+    };
+    localStorage.setItem("userInfo", JSON.stringify(userBasicInfo));
+    toast.success("Successfully created new user");
+    return userBasicInfo;
 });
 
 
