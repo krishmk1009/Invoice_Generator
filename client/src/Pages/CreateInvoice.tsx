@@ -3,6 +3,7 @@ import InvoiceForm from "../Components/InvoiceForm/InvoiceForm";
 import InvoiceTable from "../Components/InvoicePage/InvoiceTable";
 import axiosInstance from "../api/axiosInstances";
 import { FormDetails } from "../Components/InvoiceForm/typeInvoiceForm";
+import { toast } from "react-toastify";
 
 const CreateInvoice: React.FC = () => {
   const [companyData, setCompanyData] = useState<FormDetails>({
@@ -34,10 +35,11 @@ const CreateInvoice: React.FC = () => {
   
       const response = await axiosInstance.post("/invoice/new-invoice", requestData);
       console.log("Invoice created:", response.data);
-      // Optionally handle success, e.g., show a success message or navigate to another page
+      toast.success("Invoice created Succesfully")
     } catch (error) {
       console.error("Error creating invoice:", error);
-      // Optionally handle error, e.g., show an error message
+      toast.error("Something went wrong")
+
     }
   };
 
