@@ -21,7 +21,7 @@ const CreateInvoice: React.FC = () => {
   const [userId, setUserId] = useState<string | undefined>("");
 
   const handleClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.preventDefault(); // Prevent default form submission behavior
+    event.preventDefault(); 
   
     try {
       const requestData = {
