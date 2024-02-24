@@ -8,8 +8,14 @@ import Navbar from "./Components/Navbar";
 import ProtectedLayout from "./Layout/ProtectedLayout";
 import DefaultLayout from "./Layout/DefaultLayout";
 import CreateInvoice from "./Pages/CreateInvoice";
+import Preview from "./Pages/Preview";
+
 
 function App() {
+
+
+    
+
   return (
     <>
       <BrowserRouter>
@@ -19,6 +25,7 @@ function App() {
           <Route element={<ProtectedLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/create-invoice" element={<CreateInvoice />} />
+            <Route path="/preview" element={<Preview />} />
             
           </Route>
 
